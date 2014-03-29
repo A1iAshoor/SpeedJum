@@ -24,10 +24,12 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "cocos2d.h"
+
+// Google Analytics
+#import "GAI.h"
 
 @interface AppController : CCAppDelegate
-{
-}
+
+@property (nonatomic, strong) id<GAITracker> tracker;
 
 @end

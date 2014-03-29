@@ -26,6 +26,17 @@
 #import "AppDelegate.h"
 #import "CCBuilderReader.h"
 
+// Appirater
+#import "Appirater.h"
+
+// Harpy (New App Update Notifier)
+#import "Harpy.h"
+
+// Parse for push notifications
+#import <Parse/Parse.h>
+
+static NSString *const kTrackingId = @"UA-49485120-1";
+
 @implementation AppController
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -51,12 +62,124 @@
     
     [self setupCocos2dWithOptions:cocos2dSetup];
     
+    // access audio object
+    OALSimpleAudio *audio = [OALSimpleAudio sharedInstance];
+    
+    // play background sound
+    [audio playBg:@"clear-blue-sky.mp3" volume:0.05f pan:0 loop:TRUE];
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Register for push notifications
+    ////////////////////////////////////////////////////////////////////////
+    // AudioToolbox.framework
+    // CFNetwork.framework
+    // CoreGraphics.framework
+    // CoreLocation.framework
+    // libz.dylib
+    // MobileCoreServices.framework
+    // QuartzCore.framework
+    // Security.framework
+    // StoreKit.framework
+    // SystemConfiguration.framework
+    ////////////////////////////////////////////////////////////////////////
+    [Parse setApplicationId:@"lBBc8zMd728g6irKuQ96hIag57nVKlu85RoUD2sZ" clientKey:@"nBB9bAJmrQa6Gu9U9NO8dRD8pS3uHLj9caBBPzLe"];
+    
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound];
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Google Analytics.
+    ////////////////////////////////////////////////////////////////////////
+    // libGoogleAnalyticsServices.a
+    // AdSupport.framework
+    // CoreData.framework
+    // SystemConfiguration.framework
+    // libz.dylib
+    ////////////////////////////////////////////////////////////////////////
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = NO;
+    
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 10;
+    
+    // Initialize tracker.
+    self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kTrackingId];
+    self.tracker = [[GAI sharedInstance] defaultTracker];
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Appirater Hendler.
+    [Appirater setAppId:@"849128788"];
+    [Appirater setDaysUntilPrompt:7];
+    [Appirater setUsesUntilPrompt:2];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:2];
+    [Appirater setDebug:NO];
+    [Appirater appLaunched:YES];
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Harpy (New Update Notifier).
+    [[Harpy sharedInstance] setAppID:@"849128788"];
+    // Overides system language to predefined language.
+    [[Harpy sharedInstance] setForceLanguageLocalization:HarpyLanguageEnglish];
+    
     return YES;
 }
 
-- (CCScene*) startScene
+- (CCScene*)startScene
 {
     return [CCBReader loadAsScene:@"MainScene"];
+}
+
+-(void) applicationWillResignActive:(UIApplication *)application
+{
+    [[CCDirector sharedDirector] pause];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [[CCDirector sharedDirector] resume];
+
+    // Perform daily check for new version of the app
+    [[Harpy sharedInstance] checkVersionDaily];
+    
+    // Clearing the Badge
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    if (currentInstallation.badge != 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+    }
+}
+
+-(void)applicationDidEnterBackground:(UIApplication*)application
+{
+    [[CCDirector sharedDirector] stopAnimation];
+}
+
+-(void) applicationWillEnterForeground:(UIApplication*)application
+{
+    [[CCDirector sharedDirector] startAnimation];
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    [[CCDirector sharedDirector] purgeCachedData];
+}
+
+-(void) applicationSignificantTimeChange:(UIApplication *)application
+{
+    [[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
+}
+
+#pragma mark - Push notifications handlers
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:newDeviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 @end
