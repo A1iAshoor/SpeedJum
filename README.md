@@ -8,3 +8,9 @@ iOS Mobile Game Project Inspired by **Nokia Bounce Classic** and the concept of 
 It's built using Xcode (ObjectiveC), Cocos2d Game Engine & SpriteBuilder. I decided to put the source code of this game on Github so maybe someone want to contribute and make this happen, a leveled game. The gmae is already on the AppStore and has more than 400 downloads since March 2014 and most of them are from the US. *[Jun 7 2014]*
 
 Click [HERE](https://itunes.apple.com/us/app/speedjum/id849128788?ls=1&mt=8 "SpeedJum") to Download the game for FREE!!
+
+
+### Want to contribute?
+
+1. Fork the project
+1. Send a pull request
