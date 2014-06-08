@@ -1,4 +1,4 @@
-SpeedJum
+SpeedJum [![Build Status](https://travis-ci.org/A1iAshoor/SpeedJum.svg?branch=master)](https://travis-ci.org/A1iAshoor/SpeedJum)
 ========
 
 iOS Mobile Game Project Inspired by **Nokia Bounce Classic** and the concept of the pulled popular game **Flappy Bird**. This game is meant to bring Nokia Bounce Classic game to life in the AppStore but due to shortage of time and getting busy I decided to make it an endless one level game.
