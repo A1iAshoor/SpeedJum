@@ -1,12 +1,5 @@
 language: objective-c
 
-before_install: 
-- brew update
-- brew upgrade xctool
-
-script: 
-- xctool -project SpeedJum.xcodeproj -scheme SpeedJum -sdk iphonesimulator7.0 ONLY_ACTIVE_ARCH=NO clean build test 
-
 notifications:
   email:
     speedjum@uskistudios.com
