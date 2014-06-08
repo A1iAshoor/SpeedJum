@@ -24,8 +24,6 @@
  */
 
 #import <UIKit/UIKit.h>
-
-// Google Analytics
 #import "GAI.h"
 
 @interface AppController : CCAppDelegate
