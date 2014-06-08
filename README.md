@@ -9,8 +9,3 @@ It's built using Xcode (ObjectiveC), Cocos2d Game Engine & SpriteBuilder. I deci
 
 Click [HERE](https://itunes.apple.com/us/app/speedjum/id849128788?ls=1&mt=8 "SpeedJum") to Download the game for FREE!!
 
-
-### Want to contribute?
-
-1. Fork the project
-1. Send a pull request
